@@ -1,0 +1,19 @@
+git add <pathspec>
+git blame <pathspec>
+git branch -a
+git branch -d <branchname>
+git checkout
+git checkout -b <branchname>
+git clone git@github.com:evanstucker-hates-2fa/cheatsheets.git
+git commit -m <message>
+git diff HEAD 
+git diff HEAD^ HEAD
+git diff master...<branchname>
+git fetch --all --prune
+git log <pathspec>
+git merge master
+git pull
+git push
+git push --set-upstream origin <branchname>
+git rm <pathspec>
+git status
