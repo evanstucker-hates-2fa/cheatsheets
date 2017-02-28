@@ -3,46 +3,35 @@ I am a git user. I know git. I don't know Perforce. This was a helpful introduct
 http://stackoverflow.com/questions/17267218/perforce-for-git-users
 Here is the actual P4 User's Guide:
 http://www.perforce.com/perforce/r15.1/manuals/p4guide/index.html
-Install and configure Perforce
+
+
+Install and configure Perforce:
+The only thing you should need to change is the View.
+You have to log out and log back in after configuring for this to work. Otherwise you will get errors like:
+Client 'evans-laptop' unknown - use 'client' command to create it.
 sudo rpm --import https://package.perforce.com/perforce.pubkey
-cat << END > perforce.repo
+sudo bash -c $'cat << EOF > /etc/yum.repos.d/perforce.repo
 [perforce]
 name=Perforce
 baseurl=http://package.perforce.com/yum/rhel/7/x86_64
 enabled=1
 gpgcheck=1
-END
-sudo mv perforce.repo /etc/yum.repos.d
+EOF
+'
 sudo yum install -y helix-cli
- 
-if ! $(grep -q P4PORT .bash_profile); then
-    echo 'export P4PORT=perforce.example.com:1666' >> .bash_profile
-    source .bash_profile
-fi
-  
-if ! $(grep -q P4CLIENT .bash_profile); then
-    echo "export P4CLIENT=${USER}_${HOSTNAME}" >> .bash_profile
-    source .bash_profile
-fi
- 
-cat << END | p4 client -i
-Client: ${USER}_san.example.com
- 
-Owner:  ${USER}
- 
-Root:   ${HOME}
- 
-Options:        noallwrite noclobber nocompress unlocked nomodtime normdir
- 
-SubmitOptions:  submitunchanged
- 
-LineEnd:        local
- 
+cat << EOF > ~/.p4config
+P4PORT=perforce.example.com:1666
+P4CLIENT=${USER}_${HOSTNAME}
+EOF
+cat << EOF | p4 client -i
+Client: ${USER}_${HOSTNAME}
+Root:   /home/${USER}
 View:
-        //depot/crud/... //evans_san.example.com/depot/crud/...
-        -//depot/not_this_crud/... //evans_san.example.com/depot/not_this_crud/...
-END
-p4 sync
+        //depots/... //${USER}_${HOSTNAME}/depots/...
+        //depot/... //${USER}_${HOSTNAME}/depot/...
+        -//depot/not_this_directory/... //${USER}_${HOSTNAME}/depot/not_this_directory/...
+        //.git-fusion/... //${USER}_${HOSTNAME}/.git-fusion/...
+EOF
 
 View the entire history of a file with all changes included
 p4 filelog modules/product_a/manifests/init.pp | grep -E '^\.\.\. #' | awk '{ print $4 }' | xargs p4 describe -db | less
