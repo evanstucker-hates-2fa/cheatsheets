@@ -1,0 +1,22 @@
+Puppet
+Creating a new module or class
+puppet module generate
+How to see a hiera value for a particular node
+[evans@server ~]$ sudo facter -p --yaml > facts.yaml
+[evans@server ~]$ hiera -c /etc/puppet/hiera.yaml -y facts.yaml epocsysconfig
+
+How to see which packages are managed by Puppet
+sudo puppet catalog select --terminus json $(hostname) package
+
+# Some of these numbers aren't adding up. Not sure why. Probably weird package name issues? I need to look into it.
+# List of packages that Puppet is managing (ensuring installed or absent)
+sudo puppet catalog --terminus json select $(hostname) package | sed -r 's/^Package\[//; s/\]$//;'
+
+# List of packages that Puppet is ensuring are installed
+cat <(sudo puppet catalog --terminus json select $(hostname) package | sed -r 's/^Package\[//; s/\]$//;') <(rpm -qa --qf "%{NAME}\n") | sort | uniq -d
+
+# List of packages that are installed
+rpm -qa --qf "%{NAME}\n"
+
+# List of packages that are not controlled by Puppet
+cat <(cat <(sudo puppet catalog --terminus json select $(hostname) package | sed -r 's/^Package\[//; s/\]$//;') <(rpm -qa --qf "%{NAME}\n") | sort | uniq -d) <(rpm -qa --qf "%{NAME}\n") | sort | uniq -d
