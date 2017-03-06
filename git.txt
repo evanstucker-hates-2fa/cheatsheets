@@ -17,3 +17,26 @@ git push
 git push --set-upstream origin <branchname>
 git rm <pathspec>
 git status
+
+# lists branches merged into master
+git branch --merged master
+
+# lists branches merged into HEAD (i.e. tip of current branch)
+git branch --merged
+
+# lists branches that have not been merged
+git branch --no-merged
+
+# Find as good common ancestors as possible for a merge
+git merge-base HEAD etucker_fsu
+
+# Deleting branches
+git branch -d branch_name
+git push origin :branch_name || git branch -r -d branch_name
+
+# Deletes all stale remote-tracking branches under <name>. These stale branches have already been removed from the remote repository referenced by <name>, but are still locally available in "remotes/<name>".
+git remote prune origin
+
+# Something similar to git remote prune origin? Except local? More experimentation needed.
+git fetch -p
+
