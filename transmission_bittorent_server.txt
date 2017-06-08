@@ -1,4 +1,3 @@
-#!/bin/bash
 sudo dnf install -y transmission-daemon
 
 # I keep all my files on the /srv mount point.
