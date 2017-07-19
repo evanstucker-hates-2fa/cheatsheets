@@ -297,4 +297,5 @@ else
     echo "WARNING: Skipping ${file}, fuser exit code was ${fuser_exit}."
 fi
 
-
+# Forward local ports to remote servers:ports.
+ssh -L 5001:192.168.1.2:5001 -L 5002:127.0.0.1:5001 192.168.1.2
