@@ -299,3 +299,50 @@ fi
 
 # Forward local ports to remote servers:ports.
 ssh -L 5001:192.168.1.2:5001 -L 5002:127.0.0.1:5001 192.168.1.2
+
+########################################
+.bashrc stuff
+
+alias nocomment=$'sed -r \'/^[ \t]*(#|;)/d;/^[ \t]*$/d;\''
+##########################################
+
+###############################
+.bash_profile stuff
+
+# Enable ssh-agent to persist through disconnects and screen.
+if [[ "$HOSTNAME" =~ ^bastion ]]; then
+    if [[ $(pgrep -u $USER ssh-agent) == '' ]]; then
+        eval $(ssh-agent -s)
+        ln -fs $(echo $SSH_AUTH_SOCK | cut -d= -f 2) ~/.SSH_AUTH_SOCK
+    fi
+    export SSH_AUTH_SOCK=~/.SSH_AUTH_SOCK
+    if [[ $(ssh-add -l) == 'The agent has no identities.' ]]; then
+      ssh-add
+    fi
+fi
+
+# Better Bash History
+# Put this in your .bash_profile, not your .bashrc, otherwise you may get unexpected results: http://superuser.com/questions/575479/bash-history-truncated-to-500-lines-on-each-login
+# Make HIST*SIZE unlimited by setting them to a non-numeric string.
+export HISTFILESIZE=''
+export HISTSIZE=''
+export HISTTIMEFORMAT="%s "
+# Since our home directories are on an NFS export, our .bash_history gets concurrent updates. I prefer to have per-hostname history, so when I log into some server 6 months later, I can press the up arrow and see the last command I ran on it. When we get a Puppet fact for role on all servers, I'll convert this to use the role fact instead of the hostname, so we'll have histories based on roles, which would be even better.
+mkdir -p "${HOME}/.bash_histories"
+export HISTFILE="${HOME}/.bash_histories/${HOSTNAME}" # Per hostname history
+#export HISTFILE="${HOME}/.bash_histories/$(facter -p pp_role)" # Per role history (untested)
+# Creating a non-empty history file, because history -a doesn't work if there is no file or an empty file.
+if [[ ! -f $HISTFILE ]]; then
+    echo -e "#1\nstart of history" > $HISTFILE
+    chmod 600 "${HISTFILE}"
+fi
+# Force prompt to write history after every command: http://superuser.com/questions/20900/bash-history-loss
+export PROMPT_COMMAND="history -a; ${PROMPT_COMMAND}"
+shopt -s histappend
+
+###################################################
+
+# Parallel processing with xargs
+ls -1 | xargs -P 4 -I {} bash -c "echo {}; sleep 1;"
+
+smbclient //samba.evanstucker.com/users -D ${USER} -U ${USER} -W WORKGROUP
