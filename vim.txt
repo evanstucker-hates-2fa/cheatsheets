@@ -17,3 +17,6 @@ Converting indentation from two spaces to four
 :retab!
 :set ts=4 sts=4 et
 :retab
+
+Wrap lines with "gq<Enter>".
+Unwrap lines with "vipJ"
