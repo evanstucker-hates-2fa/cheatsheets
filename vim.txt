@@ -20,3 +20,5 @@ Converting indentation from two spaces to four
 
 Wrap lines with "gq<Enter>".
 Unwrap lines with "vipJ"
+
+https://github.com/puppetlabs/puppet-syntax-vim
