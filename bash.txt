@@ -72,7 +72,7 @@ ps can print lots of things with the -o command, but the full command is not one
 ps -elF | awk '{ORS=""; print $3 "\t"; for(i=17;i<NF;++i)print $i,""; ORS="\n"; print $NF;}'
 
 What are all the scheduled jobs on this server?
-for file in $(sudo find /etc/crontab /etc/anacrontab /etc/cron.d /var/spool/cron /var/spool/anacron /etc/cron.hourly /etc/cron.daily /etc/cron.weekly /etc/cron.monthly /var/spool/at -type f); do echo -e "==========\n${file}\n=========="; sudo cat $file; done | less
+for file in $(sudo find /etc/crontab /etc/anacrontab /etc/cron.d /var/spool/cron /var/spool/anacron /etc/cron.hourly /etc/cron.daily /etc/cron.weekly /etc/cron.monthly /var/spool/at -type f); do echo -e "==========\n${file}\n=========="; sudo sed -E '/^[ \t]*#/d;/^[ \t]*$/d;' $file; done | less
 
 Extract an RPM
 rpm="name_of_rpm.rpm"
