@@ -91,5 +91,12 @@ Item item1 has value 1, othervalue a and somevalue jjj
 Item item1 has value 2, othervalue b and somevalue zzz
 
 PuppetDB
+========
+
 curl -s -G 'query=["=", "trusted.extensions.pp_role", "arapi"]' http://localhost:8080/pdb/query/v4/inventory | jq .[].certname
 curl -s -G -d "query=[\"<\",\"report_timestamp\",\"$(date -d '-1 day' +%FT%T.000Z)\"]" http://pdxnppuppetdb01.iovationnp.com:8080/pdb/query/v4/nodes | jq .
+
+# Find all nodes with a specific class
+curl -s http://localhost:8080/pdb/query/v4/resources/Class/Iovation::Role::Logstash::Broker | jq .[].certname
+curl -s -G http://pdxnppuppetdb01.iovationnp.com:8080/pdb/query/v4/resources -d 'query=["extract",["certname"],["=","title","Iovation::Role::Logstash::Broker"]]' | jq .[].certname
+
