@@ -97,6 +97,8 @@ curl -s -G 'query=["=", "trusted.extensions.pp_role", "arapi"]' http://localhost
 curl -s -G -d "query=[\"<\",\"report_timestamp\",\"$(date -d '-1 day' +%FT%T.000Z)\"]" http://pdxnppuppetdb01.iovationnp.com:8080/pdb/query/v4/nodes | jq .
 
 # Find all nodes with a specific class
-curl -s http://localhost:8080/pdb/query/v4/resources/Class/Iovation::Role::Logstash::Broker | jq .[].certname
-curl -s -G http://pdxnppuppetdb01.iovationnp.com:8080/pdb/query/v4/resources -d 'query=["extract",["certname"],["=","title","Iovation::Role::Logstash::Broker"]]' | jq .[].certname
+curl -s http://localhost:8080/pdb/query/v4/resources/Class/Role::Logstash | jq .[].certname
+curl -s -G http://pdxnppuppetdb01.iovationnp.com:8080/pdb/query/v4/resources -d 'query=["extract",["certname"],["=","title","Role::Logstash"]]' | jq .[].certname
 
+# Find all Puppet-managed services on a node:
+curl -s -G http://puppetdb:8080/pdb/query/v4/resources -d 'query=["and",["=","certname","servertron.example.com"],["=","type","Service"]]' | jq .[].title
