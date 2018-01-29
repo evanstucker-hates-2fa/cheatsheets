@@ -346,3 +346,21 @@ shopt -s histappend
 ls -1 | xargs -P 4 -I {} bash -c "echo {}; sleep 1;"
 
 smbclient //samba.evanstucker.com/users -D ${USER} -U ${USER} -W WORKGROUP
+
+# Hacky way to generate new users:
+for new_user in evans duder thatguy homenugget; do
+    if [[ $new_user == 'evans' ]]; then
+        echo "Set ${new_user}'s Samba password:"
+        smbpasswd -a $new_user
+    else
+        uiohef=$(pwqgen)
+        echo $uiohef | passwd --stdin $new_user
+        echo -e "${uiohef}\n${uiohef}" | smbpasswd -a $new_user -s
+        # This could be improved to expire the account and e-mail this
+        # temporary password to the user. Also, not sure how to keep
+        # Samba and normal passwords in sync... I think passwd does
+        # that. Need to test.
+        unset uiohef
+    fi
+    usermod -aG users $new_user
+done
