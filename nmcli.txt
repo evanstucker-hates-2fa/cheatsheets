@@ -1,6 +1,18 @@
-# Don't restart NetworkManager, it doesn't seem to work right. Just stop and start it.
-sudo systemctl stop NetworkManager
-sudo systemctl start NetworkManager
+# Enable a connection
+nmcli connection modify enp5s0 connection.autoconnect yes 
+
+# Set hostname. You may want to use hostnamectl instead if you have it.
+nmcli general hostname neirin.localdomain
+
+# Static IP
+nmcli connection modify enp7s0 ipv4.method manual
+nmcli connection modify enp7s0 ipv4.addresses '192.168.1.2/24'
+nmcli connection modify enp7s0 ipv4.gateway '192.168.1.1'
+nmcli connection modify enp7s0 ipv4.dns 8.8.8.8
+nmcli connection modify enp7s0 +ipv4.dns 8.8.4.4
+
+# DHCP
+nmcli connection modify enp7s0 ipv4.method auto
 
 # Show all ipv4.dns-search (user managed) and IP4.DOMAIN (DHCP) search domains:
 while IFS=: read name uuid type device; do echo "$name $uuid"; nmcli c show $uuid | grep -E '(ipv4.dns-search|IP4.DOMAIN)'; done < <(nmcli -t c show)
