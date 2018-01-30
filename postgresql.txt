@@ -12,3 +12,6 @@ sudo -u postgres psql rundeck
 
 # Describe table
 \d+ example_table
+
+# Make output verticle instead of horizonal (similar to MySQL \G)
+\x
