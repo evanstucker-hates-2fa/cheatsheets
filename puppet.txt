@@ -102,3 +102,6 @@ curl -s -G http://pdxnppuppetdb01.iovationnp.com:8080/pdb/query/v4/resources -d 
 
 # Find all Puppet-managed services on a node:
 curl -s -G http://puppetdb:8080/pdb/query/v4/resources -d 'query=["and",["=","certname","servertron.example.com"],["=","type","Service"]]' | jq .[].title
+
+# Find all non-master environments:
+curl -s http://localhost:8080/pdb/query/v4/nodes | jq '[.[] | select(.facts_environment != "master") | { certname: .certname, facts_environment: .facts_environment }]'
