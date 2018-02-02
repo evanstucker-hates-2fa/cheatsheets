@@ -374,3 +374,15 @@ $ echo 'third.example.com' | grep -oE '(\w+\.\w+)$' | cut -d. -f1
 example
 $ echo 'third.example.com' | grep -oE '(\w+\.\w+)$' | cut -d. -f2
 com
+
+# Automatically retries a command until it succeeds.
+# Usage: auto-retry command
+# Example: auto-retry ssh pdxnpsensu02 $'uptime | grep -q \'up [0-9] mins\'' 
+# For complex commands wrap them in bash like this:
+# Example: auto-retry bash -c 'curl http://google.com | grep -q moved'
+function auto-retry {
+  while true; do
+    "$@" && break
+    sleep 3
+  done
+}
