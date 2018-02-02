@@ -364,3 +364,13 @@ for new_user in evans duder thatguy homenugget; do
     fi
     usermod -aG users $new_user
 done
+
+Getting TLD and second level domain from a FQDN:
+$ echo 'example.com' | grep -oE '(\w+\.\w+)$' | cut -d. -f1
+example
+$ echo 'example.com' | grep -oE '(\w+\.\w+)$' | cut -d. -f2
+com
+$ echo 'third.example.com' | grep -oE '(\w+\.\w+)$' | cut -d. -f1
+example
+$ echo 'third.example.com' | grep -oE '(\w+\.\w+)$' | cut -d. -f2
+com
