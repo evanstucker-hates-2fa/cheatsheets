@@ -93,6 +93,9 @@ Item item1 has value 2, othervalue b and somevalue zzz
 PuppetDB
 ========
 
+# Get all nodes that are version 7.4.
+curl -s -X GET http://localhost:8080/pdb/query/v4 --data-urlencode 'query=inventory { facts.os.release.major = "7" and facts.os.release.minor = "4"}' | jq -r .[].certname
+
 curl -s -G 'query=["=", "trusted.extensions.pp_role", "arapi"]' http://localhost:8080/pdb/query/v4/inventory | jq .[].certname
 curl -s -G -d "query=[\"<\",\"report_timestamp\",\"$(date -d '-1 day' +%FT%T.000Z)\"]" http://pdxnppuppetdb01.iovationnp.com:8080/pdb/query/v4/nodes | jq .
 
