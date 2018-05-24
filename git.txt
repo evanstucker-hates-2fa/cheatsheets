@@ -17,6 +17,8 @@ git push
 git push --set-upstream origin <branchname>
 git rm <pathspec>
 git status
+git show @{2018-05-23}:build/cluster.tf
+git show d085a2057af72e9021c353b6a6964d3c0ab9c1b3:build/cluster.tf
 
 # lists branches merged into master
 git branch --merged master
