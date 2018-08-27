@@ -241,7 +241,7 @@ find /var/log/differentthing/logs -maxdepth 1 -type f -name 'huh.log.*' "${gzip_
 find /var/log/m0arstuff/logs -maxdepth 1 -type f -name 'blibblob.log.*' "${gzip_exceptions[@]}" -mtime +30 -print0
 
 Show the 20 largest files or directories on a single file system.
-sudo du -Sax --time /var | sort -n | tail -n 20
+sudo du -Sax --time / | sort -n | tail -n 20
 Delete non-open files older than 15 days in a specific directory.
 # Just show the files that you will be deleting.
 sudo tmpwatch -st -m 15d /var/directory_you_wanna_clean
