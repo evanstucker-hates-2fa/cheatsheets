@@ -1,3 +1,5 @@
+# git cheatsheet
+
 git add <pathspec>
 git blame <pathspec>
 git branch -a
@@ -42,3 +44,15 @@ git remote prune origin
 # Something similar to git remote prune origin? Except local? More experimentation needed.
 git fetch -p
 
+# How to re-watch all Github repos if you've unwatched them.
+
+Create a Personal Access Token, put it where the word "REDACTED" is in the script below.
+
+    for repo in $(list_my_git_repos.sh | grep github | cut -d: -f2- | sed 's/\.git//'); do
+      echo "===== $repo"
+      curl \
+        -H 'Accept: application/vnd.github.v3+json' \
+        -X PUT \
+        -u 'evanstucker-hates-2fa:REDACTED' \
+        "https://api.github.com/user/subscriptions/${repo}";
+    done
